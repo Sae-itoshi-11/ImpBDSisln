@@ -1,0 +1,188 @@
+Reading table information for completion of table and column names
+You can turn off this feature to get a quicker startup with -A
+Welcome to the MySQL monitor.  Commands end with ; or \g.
+Your MySQL connection id is 6081942
+Server version: 8.0.40 Source distribution
+Copyright (c) 2000, 2022, Oracle and/or its affiliates.
+Oracle is a registered trademark of Oracle Corporation and/or its
+affiliates. Other names may be trademarks of their respective
+owners.
+Type 'help;' or '\h' for help. Type '\c' to clear the current input statement.
+mysql> use Lynniette$default;
+Database changed
+mysql> show tables;
++-----------------------------+
+| Tables_in_Lynniette$default |
++-----------------------------+
+| detalle_horario             |
+| horario                     |
+| plantilla_detalle_horario   |
+| usuarios                    |
++-----------------------------+
+4 rows in set (0.01 sec)
+mysql> SELECRT * from usuarios;
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syn
+tax to use near 'SELECRT * from usuarios' at line 1
+mysql> SELECT * from usuarios;
++-------------+------------+--------------+
+| nombre      | apellido   | departamento |
++-------------+------------+--------------+
+| brant       | heathcliff | cbtis-246    |
+| charlotte   | campshire  | cbtis-246    |
+| cheetosflmh | yelote     | cbtis-246    |
+| dahlia      | storm      | cbtis-246    |
+| damián      | riorson    | cbtis-246    |
+| ivan        | ruiz       | cbtis-246    |
+| maya        | cruz       | cbtis-246    |
+| sarah       | fernandez  | cbtis-246    |
+| vanessa     | torres     | cbtis-246    |
+| xiangli     | yao        | cbtis-246    |
++-------------+------------+--------------+
+10 rows in set (0.01 sec)
+mysql> ALTER TABLE usuarios
+    -> ADD idx int (15) NOT NULL;
+Query OK, 0 rows affected, 1 warning (0.06 sec)
+Records: 0  Duplicates: 0  Warnings: 1
+
+mysql> SELECT * from usuarios;
++-------------+------------+--------------+-----+
+| nombre      | apellido   | departamento | idx |
++-------------+------------+--------------+-----+
+| brant       | heathcliff | cbtis-246    |   0 |
+| charlotte   | campshire  | cbtis-246    |   0 |
+| cheetosflmh | yelote     | cbtis-246    |   0 |
+| dahlia      | storm      | cbtis-246    |   0 |
+| damián      | riorson    | cbtis-246    |   0 |
+| ivan        | ruiz       | cbtis-246    |   0 |
+| maya        | cruz       | cbtis-246    |   0 |
+| sarah       | fernandez  | cbtis-246    |   0 |
+| vanessa     | torres     | cbtis-246    |   0 |
+| xiangli     | yao        | cbtis-246    |   0 |
++-------------+------------+--------------+-----+
+10 rows in set (0.00 sec)
+
+mysql> UPDATE TABLE usuarios set idx= 1 where nombre = 'brant';
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'TABLE usuarios set idx= 1 where nombre = 'brant'' at line 1
+mysql> UPDATE usuarios set idx= 1 where nombre = 'brant';
+Query OK, 1 row affected (0.02 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> SELECT * from usuarios;
++-------------+------------+--------------+-----+
+| nombre      | apellido   | departamento | idx |
++-------------+------------+--------------+-----+
+| brant       | heathcliff | cbtis-246    |   1 |
+| charlotte   | campshire  | cbtis-246    |   0 |
+| cheetosflmh | yelote     | cbtis-246    |   0 |
+| dahlia      | storm      | cbtis-246    |   0 |
+| damián      | riorson    | cbtis-246    |   0 |
+| ivan        | ruiz       | cbtis-246    |   0 |
+| maya        | cruz       | cbtis-246    |   0 |
+| sarah       | fernandez  | cbtis-246    |   0 |
+| vanessa     | torres     | cbtis-246    |   0 |
+| xiangli     | yao        | cbtis-246    |   0 |
++-------------+------------+--------------+-----+
+10 rows in set (0.01 sec)
+
+mysql> UPDATE usuarios set idx= 2 where nombre = 'charlotte';
+Query OK, 1 row affected (0.02 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> UPDATE usuarios set idx= 3 where nombre = 'cheetosflmh';
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> UPDATE usuarios set idx= 5 where nombre = 'dahlia';
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> UPDATE usuarios set idx= 6 where nombre = 'damián';
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> UPDATE usuarios set idx= 7 where nombre = 'ivan';
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> SELECT * from usuarios;
++-------------+------------+--------------+-----+
+| nombre      | apellido   | departamento | idx |
++-------------+------------+--------------+-----+
+| brant       | heathcliff | cbtis-246    |   1 |
+| charlotte   | campshire  | cbtis-246    |   2 |
+| cheetosflmh | yelote     | cbtis-246    |   3 |
+| dahlia      | storm      | cbtis-246    |   5 |
+| damián      | riorson    | cbtis-246    |   6 |
+| ivan        | ruiz       | cbtis-246    |   7 |
+| maya        | cruz       | cbtis-246    |   0 |
+| sarah       | fernandez  | cbtis-246    |   0 |
+| vanessa     | torres     | cbtis-246    |   0 |
+| xiangli     | yao        | cbtis-246    |   0 |
++-------------+------------+--------------+-----+
+10 rows in set (0.00 sec)
+
+mysql> UPDATE usuarios set idx=6 where nombre = 'dahlia';
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> UPDATE usuarios set idx=5 where nombre = 'damián';
+Query OK, 1 row affected (0.02 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> UPDATE usuarios set idx=6 where nombre = 'ivan';
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> UPDATE usuarios set idx=7 where nombre = 'maya';
+Query OK, 1 row affected (0.02 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> UPDATE usuarios set idx=8 where nombre = 'sarah';
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> UPDATE usuarios set idx=9 where nombre = 'vanessa';
+Query OK, 1 row affected (0.02 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> UPDATE usuarios set idx=10 where nombre = 'xiangli';
+Query OK, 1 row affected (0.02 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> SELECT * from usuarios;
++-------------+------------+--------------+-----+
+| nombre      | apellido   | departamento | idx |
++-------------+------------+--------------+-----+
+| brant       | heathcliff | cbtis-246    |   1 |
+| charlotte   | campshire  | cbtis-246    |   2 |
+| cheetosflmh | yelote     | cbtis-246    |   3 |
+| dahlia      | storm      | cbtis-246    |   6 |
+| damián      | riorson    | cbtis-246    |   5 |
+| ivan        | ruiz       | cbtis-246    |   6 |
+| maya        | cruz       | cbtis-246    |   7 |
+| sarah       | fernandez  | cbtis-246    |   8 |
+| vanessa     | torres     | cbtis-246    |   9 |
+| xiangli     | yao        | cbtis-246    |  10 |
++-------------+------------+--------------+-----+
+10 rows in set (0.00 sec)
+
+mysql> UPDATE usuarios set idx= 4 where nombre = 'dahlia';
+Query OK, 1 row affected (0.02 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> SELECT * from usuarios;
++-------------+------------+--------------+-----+
+| nombre      | apellido   | departamento | idx |
++-------------+------------+--------------+-----+
+| brant       | heathcliff | cbtis-246    |   1 |
+| charlotte   | campshire  | cbtis-246    |   2 |
+| cheetosflmh | yelote     | cbtis-246    |   3 |
+| dahlia      | storm      | cbtis-246    |   4 |
+| damián      | riorson    | cbtis-246    |   5 |
+| ivan        | ruiz       | cbtis-246    |   6 |
+| maya        | cruz       | cbtis-246    |   7 |
+| sarah       | fernandez  | cbtis-246    |   8 |
+| vanessa     | torres     | cbtis-246    |   9 |
+| xiangli     | yao        | cbtis-246    |  10 |
++-------------+------------+--------------+-----+
+10 rows in set (0.00 sec)
