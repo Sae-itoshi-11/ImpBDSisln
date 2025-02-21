@@ -17,7 +17,7 @@
 
     CREATE TABLE hockeygame (
         id int (16) NOT NULL,
-        roundld int (16) NOT NULL,
+        roundId int (16) NOT NULL,
         description text,
         startTime date NOT NULL,
         team1Id int (13) NOT NULL,
