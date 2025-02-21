@@ -105,6 +105,14 @@ mysql> DESC hockeyteamplayer;
 mysql> INSERT into hockeyteamplayer (id, hockeyTeamId, firstName, lastName,jerseyNum, position) values (1, 2, 'Conor', 'Garland', 8, 'Forward');
 Query OK, 1 row affected (0.01 sec)
 
+mysql> SELECT * from hockeyteamplayer;
++----+--------------+-----------+----------+-----------+----------+
+| id | hockeyTeamId | firstName | lastName | jerseyNum | position |
++----+--------------+-----------+----------+-----------+----------+
+|  1 |            2 | Conor     | Garland  |         8 | Forward  |
++----+--------------+-----------+----------+-----------+----------+
+1 row in set (0.01 sec)
+
 mysql> DESC playoffround;
 +-----------+------+------+-----+---------+-------+
 | Field     | Type | Null | Key | Default | Extra |
