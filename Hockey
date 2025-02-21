@@ -1,0 +1,111 @@
+    /* 
+    IMPLEMENTA BASES DE DATOS RELACIONALES EN UN SISTEMA DE RELACIÓN
+    20/02/2025  4°J
+    JOCELYN ABIGAIL HUERTA AVILÉS
+    HOCKEY
+    */    
+    
+    CREATE TABLE playoffround (
+        id int (16) NOT NULL,
+        team1Id int (13) NOT NULL,
+        team2Id int (16) NOT NULL,
+        startTime date NOT NULL,
+        endTime date NOT NULL,
+        roundNum int (16) NOT NULL,
+        PRIMARY KEY (id, startTime)
+    );
+
+    CREATE TABLE hockeygame (
+        id int (16) NOT NULL,
+        roundld int (16) NOT NULL,
+        description text,
+        startTime date NOT NULL,
+        team1Id int (13) NOT NULL,
+        team2Id int (13) NOT NULL,
+        PRIMARY KEY (id, startTime)
+
+    );
+
+    CREATE TABLE gamescores (
+        id int (16) NOT NULL,
+        team1IdScore int (2) NOT NULL,
+        team2IdScore int (2) NOT NULL,
+        PRIMARY KEY (id)
+
+    );
+
+    CREATE TABLE hockeyteam (
+        id int (16) NOT NULL,
+        name varchar (27) NOT NULL,
+        logo varchar (10) NOT NULL,
+        PRIMARY KEY (id)
+
+    );
+
+    CREATE TABLE hockeyteamplayer (
+        id int (16) NOT NULL,
+        hockeyTeamId int (16) NOT NULL,
+        firstName varchar (20) NOT NULL,
+        lastName varchar (25) NOT NULL,
+        jerseyNum int (3) NOT NULL,
+        position varchar (30) NOT NULL,
+        PRIMARY KEY (id)
+
+    );
+
+    CREATE TABLE user (
+        id int (16) NOT NULL,
+        username varchar (40) NOT NULL,
+        password varchar (35) NOT NULL,
+        PRIMARY KEY (id)
+
+    );
+
+    CREATE TABLE userinfo (
+        id int (16) NOT NULL,
+        firstName varchar (20) NOT NULL,
+        lastName varchar (25) NOT NULL,
+        email varchar (45) NOT NULL,
+        round1Points int (2) NOT NULL,
+        round2Points int (2) NOT NULL,
+        round3Points int (2) NOT NULL,
+        round4Points int (2) NOT NULL,
+        PRIMARY KEY (id)
+
+    );
+
+    CREATE TABLE userscorepicks (
+        id int (16) NOT NULL,
+        hockeyGameId int (16) NOT NULL,
+        team1IdScore int (2) NOT NULL,
+        team2IdScore int (2) NOT NULL,
+        userId int (16) NOT NULL,
+        PRIMARY KEY (id)
+
+    );
+
+    CREATE TABLE userstatspicks (
+        id int (16) NOT NULL,
+        roundld int (16) NOT NULL,
+        goalLeaderId varchar(16) NOT NULL,
+        assistLeaderId  varchar (16) NOT NULL,
+        penaltyLeaderId varchar (16) NOT NULL,
+        plusMinusId int (16) NOT NULL,
+        faceOffsWonLeaderId int (2) NOT NULL,
+        sogLeaderId int (2) NOT NULL,
+        numShutouts int (2) NOT NULL,
+        userId int (16) NOT NULL,
+        PRIMARY KEY (id)
+    );
+
+    CREATE TABLE roundstats (
+        id int (16) NOT NULL,
+        numShutouts int (2) NOT NULL,
+        goalLeaderId varchar(16) NOT NULL,
+        assistLeaderId  varchar (16) NOT NULL,
+        penaltyLeaderId varchar (16) NOT NULL,
+        plusMinusId int (16) NOT NULL,
+        faceOffsWonLeaderId int (2) NOT NULL,
+        sogLeaderId int (2) NOT NULL,
+        PRIMARY KEY (id)
+    );
