@@ -279,3 +279,28 @@ mysql> DESC userstatspicks;
 | userId              | int         | NO   |     | NULL    |       |
 +---------------------+-------------+------+-----+---------+-------+
 10 rows in set (0.00 sec)
+    
+mysql> ALTER TABLE userstatspicks MODIFY faceOffsWonLeaderId varchar(20);
+Query OK, 0 rows affected (0.06 sec)
+Records: 0  Duplicates: 0  Warnings: 0
+    
+mysql> ALTER TABLE userstatspicks MODIFY sogLeaderId  varchar(20);
+Query OK, 0 rows affected (0.05 sec)
+Records: 0  Duplicates: 0  Warnings: 0
+    
+mysql> INSERT into userstatspicks (id, roundId, goalLeaderId,assistLeaderId, penaltyLeaderId, plusMinusId, faceOffsWonLeaderId, sogLeaderI
+d, numShutouts, userId) values (1, 1, 'Canucks', 'Canucks', 'Canucks', 4, 'Canucks', 'Canucks', 10, 1);
+Query OK, 1 row affected (0.00 sec)
+    
+mysql> SELECT * from userstatspicks;
++----+---------+--------------+----------------+-----------------+-------------+---------------------+-------------+-------------+--------
++
+| id | roundId | goalLeaderId | assistLeaderId | penaltyLeaderId | plusMinusId | faceOffsWonLeaderId | sogLeaderId | numShutouts | userId 
+|
++----+---------+--------------+----------------+-----------------+-------------+---------------------+-------------+-------------+--------
++
+|  1 |       1 | Canucks      | Canucks        | Canucks         |           4 | Canucks             | Canucks     |          10 |      1 
+|
++----+---------+--------------+----------------+-----------------+-------------+---------------------+-------------+-------------+--------
++
+1 row in set (0.00 sec)
