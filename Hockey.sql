@@ -125,3 +125,102 @@ mysql> DESC playoffround;
 | roundNum  | int  | NO   |     | NULL    |       |
 +-----------+------+------+-----+---------+-------+
 6 rows in set (0.00 sec)
+mysql> ALTER TABLE playoffround MODIFY startTime timestamp;
+Query OK, 0 rows affected (0.05 sec)
+Records: 0  Duplicates: 0  Warnings: 0
+
+mysql> DESC playoffround;
++-----------+-----------+------+-----+---------+-------+
+| Field     | Type      | Null | Key | Default | Extra |
++-----------+-----------+------+-----+---------+-------+
+| id        | int       | NO   | PRI | NULL    |       |
+| team1Id   | int       | NO   |     | NULL    |       |
+| team2Id   | int       | NO   |     | NULL    |       |
+| startTime | timestamp | NO   | PRI | NULL    |       |
+| endTime   | date      | NO   |     | NULL    |       |
+| roundNum  | int       | NO   |     | NULL    |       |
++-----------+-----------+------+-----+---------+-------+
+6 rows in set (0.01 sec)
+mysql> ALTER TABLE playoffround MODIFY endTime timestamp;
+Query OK, 0 rows affected (0.05 sec)
+Records: 0  Duplicates: 0  Warnings: 0
+
+mysql> DESC playoffround;
++-----------+-----------+------+-----+---------+-------+
+| Field     | Type      | Null | Key | Default | Extra |
++-----------+-----------+------+-----+---------+-------+
+| id        | int       | NO   | PRI | NULL    |       |
+| team1Id   | int       | NO   |     | NULL    |       |
+| team2Id   | int       | NO   |     | NULL    |       |
+| startTime | timestamp | NO   | PRI | NULL    |       |
+| endTime   | timestamp | YES  |     | NULL    |       |
+| roundNum  | int       | NO   |     | NULL    |       |
++-----------+-----------+------+-----+---------+-------+
+6 rows in set (0.00 sec)
+mysql> INSERT into playoffround (id, team1Id, team2Id, startTime, endTime, roundNum) values (1, 1, 2, '2025/02/08 19:00:00', '2025/02/08 2
+1:00:00', 3);
+Query OK, 1 row affected, 2 warnings (0.01 sec)
+
+mysql> DESC roundstats;
++---------------------+-------------+------+-----+---------+-------+
+| Field               | Type        | Null | Key | Default | Extra |
++---------------------+-------------+------+-----+---------+-------+
+| id                  | int         | NO   | PRI | NULL    |       |
+| numShutouts         | int         | NO   |     | NULL    |       |
+| goalLeaderId        | varchar(16) | NO   |     | NULL    |       |
+| assistLeaderId      | varchar(16) | NO   |     | NULL    |       |
+| penaltyLeaderId     | varchar(16) | NO   |     | NULL    |       |
+| plusMinusId         | int         | NO   |     | NULL    |       |
+| faceOffsWonLeaderId | int         | NO   |     | NULL    |       |
+| sogLeaderId         | int         | NO   |     | NULL    |       |
++---------------------+-------------+------+-----+---------+-------+
+8 rows in set (0.00 sec)
+mysql> ALTER TABLE faceOffsWonLeaderId MODIFY endTime varchar(16);
+ERROR 1146 (42S02): Table 'Lynniette$default.faceOffsWonLeaderId' doesn't exist
+
+mysql> ALTER TABLE roundstats MODIFY faceOffsWonLeaderId varchar(16);
+Query OK, 0 rows affected (0.05 sec)
+Records: 0  Duplicates: 0  Warnings: 0
+
+mysql> ALTER TABLE roundstats MODIFY sogLeaderId varchar(16);
+Query OK, 0 rows affected (0.05 sec)
+Records: 0  Duplicates: 0  Warnings: 0
+
+mysql> INSERT into roundstats (id, numShutouts, goalLeaderId, assistLeaderId, penaltyLeaderId, plusMinusId, faceOffsWonLeaderId, sogLeader
+Id) values (1, 10, 'Canucks', 'Canucks', 'Canucks', 4, 'Canucks', 'Canucks');
+Query OK, 1 row affected (0.00 sec)
+
+mysql> SLELECT * from roundstats;
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syn
+tax to use near 'SLELECT * from roundstats' at line 1
+
+mysql> SELECT * from roundstats;
++----+-------------+--------------+----------------+-----------------+-------------+---------------------+-------------+
+| id | numShutouts | goalLeaderId | assistLeaderId | penaltyLeaderId | plusMinusId | faceOffsWonLeaderId | sogLeaderId |
++----+-------------+--------------+----------------+-----------------+-------------+---------------------+-------------+
+|  1 |          10 | Canucks      | Canucks        | Canucks         |           4 | Canucks             | Canucks     |
++----+-------------+--------------+----------------+-----------------+-------------+---------------------+-------------+
+1 row in set (0.00 sec)
+ -> DESC user;
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syn
+tax to use near 'ysql> INSERT into playoffround (id, team1Id, team2Id, startTime, endTime, roundN' at line 1
+mysql> DESC user;
++----------+-------------+------+-----+---------+-------+
+| Field    | Type        | Null | Key | Default | Extra |
++----------+-------------+------+-----+---------+-------+
+| id       | int         | NO   | PRI | NULL    |       |
+| username | varchar(40) | NO   |     | NULL    |       |
+| password | varchar(35) | NO   |     | NULL    |       |
++----------+-------------+------+-----+---------+-------+
+3 rows in set (0.00 sec)
+mysql> INSERT into user (id, username, password) values (1, 'jxjxO', 'stwbrry2');
+Query OK, 1 row affected (0.00 sec)
+
+mysql> SELECT * from user;
++----+----------+----------+
+| id | username | password |
++----+----------+----------+
+|  1 | jxjxO    | stwbrry2 |
++----+----------+----------+
+1 row in set (0.00 sec)
+
