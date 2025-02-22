@@ -223,4 +223,59 @@ mysql> SELECT * from user;
 |  1 | jxjxO    | stwbrry2 |
 +----+----------+----------+
 1 row in set (0.00 sec)
-
+mysql> DESC userinfo;
++--------------+-------------+------+-----+---------+-------+
+| Field        | Type        | Null | Key | Default | Extra |
++--------------+-------------+------+-----+---------+-------+
+| id           | int         | NO   | PRI | NULL    |       |
+| firstName    | varchar(20) | NO   |     | NULL    |       |
+| lastName     | varchar(25) | NO   |     | NULL    |       |
+| email        | varchar(45) | NO   |     | NULL    |       |
+| round1Points | int         | NO   |     | NULL    |       |
+| round2Points | int         | NO   |     | NULL    |       |
+| round3Points | int         | NO   |     | NULL    |       |
+| round4Points | int         | NO   |     | NULL    |       |
++--------------+-------------+------+-----+---------+-------+
+8 rows in set (0.01 sec)   
+mysql> INSERT into userinfo (id, firstName, lastName, email, round1Points, round2Points, round3Points, round4Points) values (1, 'Allison',
+'Stone', 'alli@gmail.com', 1, 1-1, 1-2, 0);
+Query OK, 1 row affected (0.00 sec)
+    
+mysql> DESC userscorepicks;
++--------------+------+------+-----+---------+-------+
+| Field        | Type | Null | Key | Default | Extra |
++--------------+------+------+-----+---------+-------+
+| id           | int  | NO   | PRI | NULL    |       |
+| hockeyGameId | int  | NO   |     | NULL    |       |
+| team1IdScore | int  | NO   |     | NULL    |       |
+| team2IdScore | int  | NO   |     | NULL    |       |
+| userId       | int  | NO   |     | NULL    |       |
++--------------+------+------+-----+---------+-------+
+5 rows in set (0.00 sec)
+mysql> INSERT into userscorepicks (id, hockeyGameId, team1IdScore, team2IdScore,userId) values (1, 1, 1, 2, 1);
+Query OK, 1 row affected (0.01 sec)
+    
+mysql> SELECT * from userscorepicks;
++----+--------------+--------------+--------------+--------+
+| id | hockeyGameId | team1IdScore | team2IdScore | userId |
++----+--------------+--------------+--------------+--------+
+|  1 |            1 |            1 |            2 |      1 |
++----+--------------+--------------+--------------+--------+
+1 row in set (0.00 sec)
+    
+mysql> DESC userstatspicks;
++---------------------+-------------+------+-----+---------+-------+
+| Field               | Type        | Null | Key | Default | Extra |
++---------------------+-------------+------+-----+---------+-------+
+| id                  | int         | NO   | PRI | NULL    |       |
+| roundld             | int         | NO   |     | NULL    |       |
+| goalLeaderId        | varchar(16) | NO   |     | NULL    |       |
+| assistLeaderId      | varchar(16) | NO   |     | NULL    |       |
+| penaltyLeaderId     | varchar(16) | NO   |     | NULL    |       |
+| plusMinusId         | int         | NO   |     | NULL    |       |
+| faceOffsWonLeaderId | int         | NO   |     | NULL    |       |
+| sogLeaderId         | int         | NO   |     | NULL    |       |
+| numShutouts         | int         | NO   |     | NULL    |       |
+| userId              | int         | NO   |     | NULL    |       |
++---------------------+-------------+------+-----+---------+-------+
+10 rows in set (0.00 sec)
