@@ -4,7 +4,7 @@ Implemetacion de una base de datos relacional en un sistema de informacion
 Alumno- Jocelyn Abigail Huerta Avilés
 Operaciones con Joins
 CORREGIDO
-/*
+*/
 
 CREATE TABLE BOOKS (
  ID INT PRIMARY KEY AUTO_INCREMENT,
