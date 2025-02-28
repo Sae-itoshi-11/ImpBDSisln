@@ -60,11 +60,25 @@ VALUES
  --JOIN NATURAL
  --LEFT EXCLUDING JOIN
 
+-----------------------------------------------------------------------------------------------------------
+/* 
+INNER JOIN
+*/
 
 SELECT * from BOOKS INNER JOIN AUTHORS ON BOOKS.AUTHORID = AUTHORS.ID;
+------------------------------------------------------------------------------------------------------------
+/* 
+LEFT/RIGHT OUTER JOIN 
+*/
 
 SELECT * from BOOKS LEFT OUTER JOIN CATEGORIES ON BOOKS.CATEGORYID = CATEGORIES.ID;
----------------------------
+
+SELECT * from BOOKS RIGHT OUTER JOIN CATEGORIES ON BOOKS.CATEGORYID = CATEGORIES.ID;
+--------------------------------------------------------------------------------------------------------------
+/* 
+FULL OUTER 
+*/
+
 SELECT * FROM t1
 LEFT JOIN t2 ON t1.id = t2.id
 UNION ALL
