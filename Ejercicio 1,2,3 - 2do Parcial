@@ -1,0 +1,234 @@
+//
+Ejercicio 1
+//
+CREATE TABLE DirectorioTel (
+    CustomerId int (4) NOT NULL,
+    TypePhoneNumber varchar (10) NOT NULL,
+    Number varchar (13) NOT NULL 
+);
+
+CREATE TABLE NumerodeDispositivos (
+    CustomerId int NOT NULL,
+    Celular varchar (10),
+    Trabajo varchar (10),
+    Casa varchar (10),
+    PRIMARY KEY (CustomerId)
+
+);
+
+ SELECT 
+     CustomerId,
+     MAX(CASE WHEN TypePhoneNumber = 'Celular' THEN Number END) AS 'Celular',
+     MAX(CASE WHEN TypePhoneNumber = 'Trabajo' THEN Number END) AS 'Trabajo',
+     MAX(CASE WHEN TypePhoneNumber = 'Casa' THEN Number END) AS 'Casa'
+ FROM 
+     DirectorioTel
+ GROUP BY 
+     CustomerId;
+
+SQL:
+
+mysql> CREATE TABLE DirectorioTel (
+    ->     CustomerId int (4) NOT NULL,
+    ->     TypePhoneNumber varchar (10) NOT NULL,
+    ->     Number varchar (13) NOT NULL 
+    -> );
+Query OK, 0 rows affected, 1 warning (0.03 sec)
+mysql> DESC DirectorioTel;
++-----------------+-------------+------+-----+---------+-------+
+| Field           | Type        | Null | Key | Default | Extra |
++-----------------+-------------+------+-----+---------+-------+
+| CustomerId      | int         | NO   |     | NULL    |       |
+| TypePhoneNumber | varchar(10) | NO   |     | NULL    |       |
+| Number          | varchar(13) | NO   |     | NULL    |       |
++-----------------+-------------+------+-----+---------+-------+
+3 rows in set (0.00 sec)
+
+mysql> INSERT INTO DirectorioTel (CustomerId, TypePhoneNumber, Number) VALUES (1001, 'Celular', '333-897-5421');
+Query OK, 1 row affected (0.00 sec)
+
+mysql> INSERT INTO DirectorioTel (CustomerId, TypePhoneNumber, Number) VALUES (1001, 'Trabajo', '333-897-6542');
+Query OK, 1 row affected (0.00 sec)
+
+mysql> INSERT INTO DirectorioTel (CustomerId, TypePhoneNumber, Number) VALUES (1001, 'Casa', '333-698-9874');
+Query OK, 1 row affected (0.01 sec)
+
+mysql> INSERT INTO DirectorioTel (CustomerId, TypePhoneNumber, Number) VALUES (2002, 'Celular', '333-963-6544');
+Query OK, 1 row affected (0.00 sec)
+
+mysql> INSERT INTO DirectorioTel (CustomerId, TypePhoneNumber, Number) VALUES (2002, 'Trabajo', '333-812-9856');
+Query OK, 1 row affected (0.00 sec)
+
+mysql> INSERT INTO DirectorioTel (CustomerId, TypePhoneNumber, Number) VALUES (3003, 'Celular', '333-987-6541');
+Query OK, 1 row affected (0.00 sec)
+
+mysql> SELECT CustomerId,TypePhoneNumber,Number FROM DirectorioTel;
++------------+-----------------+--------------+
+| CustomerId | TypePhoneNumber | Number       |
++------------+-----------------+--------------+
+|       1001 | Celular         | 333-897-5421 |
+|       1001 | Trabajo         | 333-897-6542 |
+|       1001 | Casa            | 333-698-9874 |
+|       2002 | Celular         | 333-963-6544 |
+|       2002 | Trabajo         | 333-812-9856 |
+|       3003 | Celular         | 333-987-6541 |
++------------+-----------------+--------------+
+6 rows in set (0.00 sec)
+
+mysql> CREATE TABLE NumerodeDispositivos (
+    ->     CustomerId int NOT NULL,
+    ->     Celular varchar (10),
+    ->     Trabajo varchar (10),
+    ->     Casa varchar (10),
+    ->     PRIMARY KEY (CustomerId)
+    -> 
+    -> );
+Query OK, 0 rows affected (0.03 sec)
+
+
+mysql> SELECT 
+    ->      CustomerId,
+    ->      MAX(CASE WHEN TypePhoneNumber = 'Celular' THEN Number END) AS 'Celular',
+    ->      MAX(CASE WHEN TypePhoneNumber = 'Trabajo' THEN Number END) AS 'Trabajo',
+    ->      MAX(CASE WHEN TypePhoneNumber = 'Casa' THEN Number END) AS 'Casa'
+    ->  FROM 
+    ->      DirectorioTel
+    ->  GROUP BY 
+    ->      CustomerId;
++------------+--------------+--------------+--------------+
+| CustomerId | Celular      | Trabajo      | Casa         |
++------------+--------------+--------------+--------------+
+|       1001 | 333-897-5421 | 333-897-6542 | 333-698-9874 |
+|       2002 | 333-963-6544 | 333-812-9856 | NULL         |
+|       3003 | 333-987-6541 | NULL         | NULL         |
++------------+--------------+--------------+--------------+
+3 rows in set (0.00 sec)
+-----------------------------------------------------------------
+// 
+EJERCICIO 2
+//
+
+CREATE TABLE EtapdeDesa (
+    Desarrollo varchar (7) NOT NULL,
+    Etapa int (1) NOT NULL,
+    Finalizado varchar (12)
+);
+
+SQL:    
+
+ysql> CREATE TABLE EtapdeDesa (
+    ->     Desarrollo varchar (7) NOT NULL,
+    ->     Etapa int (1) NOT NULL,
+    ->     Finalizado varchar (12)
+    -> );
+Query OK, 0 rows affected, 1 warning (0.02 sec)
+
+mysql> INSERT INTO EtapdeDesa (Desarrollo, Etapa, Finalizado) values ('RestAPI', 1, '01/02/2024');
+Query OK, 1 row affected (0.00 sec)
+
+mysql> INSERT INTO EtapdeDesa (Desarrollo, Etapa, Finalizado) values ('RestAPI', 2, '30/05/2024');
+Query OK, 1 row affected (0.01 sec)
+
+mysql> INSERT INTO EtapdeDesa (Desarrollo, Etapa, Finalizado) values ('RestAPI', 3, '29/06/2024');
+Query OK, 1 row affected (0.01 sec)
+
+mysql> INSERT INTO EtapdeDesa (Desarrollo, Etapa, Finalizado) values ('Web', 1, '28/10/2024');
+Query OK, 1 row affected (0.00 sec)
+
+mysql> INSERT INTO EtapdeDesa (Desarrollo, Etapa, Finalizado) values ('Web', 2, '20/11/2024');
+Query OK, 1 row affected (0.01 sec)
+
+mysql> INSERT INTO EtapdeDesa (Desarrollo, Etapa) values ('Web', 3);
+Query OK, 1 row affected (0.00 sec)
+
+mysql> INSERT INTO EtapdeDesa (Desarrollo, Etapa, Finalizado) values ('App', 1, '30/01/2025');
+Query OK, 1 row affected (0.01 sec)
+
+mysql> INSERT INTO EtapdeDesa (Desarrollo, Etapa) values ('App', 2);
+Query OK, 1 row affected (0.00 sec)
+mysql> SELECT * from  EtapdeDesa;
++------------+-------+------------+
+| Desarrollo | Etapa | Finalizado |
++------------+-------+------------+
+| RestAPI    |     1 | 01/02/2024 |
+| RestAPI    |     2 | 30/05/2024 |
+| RestAPI    |     3 | 29/06/2024 |
+| Web        |     1 | 28/10/2024 |
+| Web        |     2 | 20/11/2024 |
+| Web        |     3 | NULL       |
+| App        |     1 | 30/01/2025 |
+| App        |     2 | NULL       |
++------------+-------+------------+
+8 rows in set (0.00 sec)
+mysql> SELECT * FROM EtapdeDesa WHERE Finalizado IS NULL;
++------------+-------+------------+
+| Desarrollo | Etapa | Finalizado |
++------------+-------+------------+
+| Web        |     3 | NULL       |
+| App        |     2 | NULL       |
++------------+-------+------------+
+2 rows in set (0.00 sec)
+-------------------------------------------------------------------------------------------------------------------------------------------
+//
+EJERCICIO 3
+//
+
+mysql> CREATE TABLE MisionMarte (
+    ->     IdCandidato int (4) NOT NULL,
+    ->     Descripcion varchar (14) NOT NULL
+    -> );
+Query OK, 0 rows affected, 1 warning (0.03 sec)
+
+mysql> INSERT INTO MisionMarte (IdCandidato, Descripcion) values (1001, 'Geólogo');
+Query OK, 1 row affected (0.00 sec)
+
+mysql> INSERT INTO MisionMarte (IdCandidato, Descripcion) values (1001, 'Astrónomo');
+Query OK, 1 row affected (0.01 sec)
+
+mysql> INSERT INTO MisionMarte (IdCandidato, Descripcion) values (1001, 'Bioquímico');
+Query OK, 1 row affected (0.01 sec)
+
+mysql> INSERT INTO MisionMarte (IdCandidato, Descripcion) values (1001, 'Técnico');
+Query OK, 1 row affected (0.01 sec)
+
+mysql> INSERT INTO MisionMarte (IdCandidato, Descripcion) values (2002,'Cirujano');
+Query OK, 1 row affected (0.01 sec)
+
+mysql> INSERT INTO MisionMarte (IdCandidato, Descripcion) values (2002, 'Mecánico');
+Query OK, 1 row affected (0.01 sec)
+
+mysql> INSERT INTO MisionMarte (IdCandidato, Descripcion) values (2002, 'Geólogo');
+Query OK, 1 row affected (0.00 sec)
+
+mysql> INSERT INTO MisionMarte (IdCandidato, Descripcion) values (3003, 'Geólogo');
+Query OK, 1 row affected (0.00 sec)
+
+mysql> INSERT INTO MisionMarte (IdCandidato, Descripcion) values (3003, 'Astrónomo');
+Query OK, 1 row affected (0.01 sec)
+
+mysql> INSERT INTO MisionMarte (IdCandidato, Descripcion) values (4004, 'Ingeniero');
+Query OK, 1 row affected (0.00 sec)
+
+mysql>  CREATE TABLE Requisitos (
+    ->      Descripcion varchar (20) NOT NULL
+    ->  );
+Query OK, 0 rows affected (0.02 sec)
+
+mysql>  INSERT INTO Requisitos (Descripcion) VALUES
+    ->  ('Geólogo'),
+    ->  ('Astrónomo'),
+    ->  ('Técnico');
+Query OK, 3 rows affected (0.00 sec)
+Records: 3  Duplicates: 0  Warnings: 0
+
+mysql> SELECT IdCandidato
+    ->  FROM MisionMarte
+    ->  WHERE Descripcion IN (SELECT Descripcion FROM Requisitos)
+    ->  GROUP BY IdCandidato
+    ->  HAVING COUNT(DISTINCT Descripcion) = (SELECT COUNT(*) FROM Requisitos);
++-------------+
+| IdCandidato |
++-------------+
+|        1001 |
++-------------+
+1 row in set (0.01 sec)
