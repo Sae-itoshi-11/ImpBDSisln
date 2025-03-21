@@ -1,1 +1,75 @@
+mysql> CREATE TABLE DirectorioTel (
+    ->     CustomerId int (4) NOT NULL,
+    ->     TypePhoneNumber varchar (10) NOT NULL,
+    ->     Number varchar (13) NOT NULL 
+    -> );
+Query OK, 0 rows affected, 1 warning (0.03 sec)
+mysql> DESC DirectorioTel;
++-----------------+-------------+------+-----+---------+-------+
+| Field           | Type        | Null | Key | Default | Extra |
++-----------------+-------------+------+-----+---------+-------+
+| CustomerId      | int         | NO   |     | NULL    |       |
+| TypePhoneNumber | varchar(10) | NO   |     | NULL    |       |
+| Number          | varchar(13) | NO   |     | NULL    |       |
++-----------------+-------------+------+-----+---------+-------+
+3 rows in set (0.00 sec)
 
+mysql> INSERT INTO DirectorioTel (CustomerId, TypePhoneNumber, Number) VALUES (1001, 'Celular', '333-897-5421');
+Query OK, 1 row affected (0.00 sec)
+
+mysql> INSERT INTO DirectorioTel (CustomerId, TypePhoneNumber, Number) VALUES (1001, 'Trabajo', '333-897-6542');
+Query OK, 1 row affected (0.00 sec)
+
+mysql> INSERT INTO DirectorioTel (CustomerId, TypePhoneNumber, Number) VALUES (1001, 'Casa', '333-698-9874');
+Query OK, 1 row affected (0.01 sec)
+
+mysql> INSERT INTO DirectorioTel (CustomerId, TypePhoneNumber, Number) VALUES (2002, 'Celular', '333-963-6544');
+Query OK, 1 row affected (0.00 sec)
+
+mysql> INSERT INTO DirectorioTel (CustomerId, TypePhoneNumber, Number) VALUES (2002, 'Trabajo', '333-812-9856');
+Query OK, 1 row affected (0.00 sec)
+
+mysql> INSERT INTO DirectorioTel (CustomerId, TypePhoneNumber, Number) VALUES (3003, 'Celular', '333-987-6541');
+Query OK, 1 row affected (0.00 sec)
+
+mysql> SELECT CustomerId,TypePhoneNumber,Number FROM DirectorioTel;
++------------+-----------------+--------------+
+| CustomerId | TypePhoneNumber | Number       |
++------------+-----------------+--------------+
+|       1001 | Celular         | 333-897-5421 |
+|       1001 | Trabajo         | 333-897-6542 |
+|       1001 | Casa            | 333-698-9874 |
+|       2002 | Celular         | 333-963-6544 |
+|       2002 | Trabajo         | 333-812-9856 |
+|       3003 | Celular         | 333-987-6541 |
++------------+-----------------+--------------+
+6 rows in set (0.00 sec)
+
+mysql> CREATE TABLE NumerodeDispositivos (
+    ->     CustomerId int NOT NULL,
+    ->     Celular varchar (10),
+    ->     Trabajo varchar (10),
+    ->     Casa varchar (10),
+    ->     PRIMARY KEY (CustomerId)
+    -> 
+    -> );
+Query OK, 0 rows affected (0.03 sec)
+
+
+mysql> SELECT 
+    ->      CustomerId,
+    ->      MAX(CASE WHEN TypePhoneNumber = 'Celular' THEN Number END) AS 'Celular',
+    ->      MAX(CASE WHEN TypePhoneNumber = 'Trabajo' THEN Number END) AS 'Trabajo',
+    ->      MAX(CASE WHEN TypePhoneNumber = 'Casa' THEN Number END) AS 'Casa'
+    ->  FROM 
+    ->      DirectorioTel
+    ->  GROUP BY 
+    ->      CustomerId;
++------------+--------------+--------------+--------------+
+| CustomerId | Celular      | Trabajo      | Casa         |
++------------+--------------+--------------+--------------+
+|       1001 | 333-897-5421 | 333-897-6542 | 333-698-9874 |
+|       2002 | 333-963-6544 | 333-812-9856 | NULL         |
+|       3003 | 333-987-6541 | NULL         | NULL         |
++------------+--------------+--------------+--------------+
+3 rows in set (0.00 sec)
