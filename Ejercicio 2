@@ -186,3 +186,4 @@ mysql> SELECT IdCliente, IdOrden, EstadoDestin, Costo
 3 rows in set (0.00 sec)
 
 
+
