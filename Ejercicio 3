@@ -1,0 +1,126 @@
+/* 
+EJERCICIO 1
+*/
+
+mysql> CREATE TABLE CasosPrueba (
+    ->     Caso char(1)
+    -> );
+
+Query OK, 0 rows affected (0.01 sec)
+
+mysql> INSERT INTO CasosPrueba (Caso)
+    -> VALUES ('A'), ('B'), ('C');
+Query OK, 3 rows affected (0.00 sec)
+Records: 3  Duplicates: 0  Warnings: 0
+
+mysql> SELECT CONCAT(a.Caso, ',', b.Caso, ',', c.Caso) AS Permutacion
+    -> FROM CasosPrueba a
+    -> JOIN CasosPrueba b ON a.Caso != b.Caso
+    -> JOIN CasosPrueba c ON a.Caso != c.Caso AND b.Caso != c.Caso;
+
++-------------+
+| Permutacion |
++-------------+
+| B,C,A       |
+| C,B,A       |
+| A,C,B       |
+| C,A,B       |
+| A,B,C       |
+| B,A,C       |
++-------------+
+6 rows in set (0.00 sec)
+
+------------------------------------------------------------------------------------------------------------------
+/*
+EJERCICIO 2
+*/
+
+mysql> CREATE TABLE Desarrollo (
+    ->     Id int AUTO_INCREMENT PRIMARY KEY,
+    ->     Tipo varchar(20),
+    ->     Terminacion date
+    -> );
+Query OK, 0 rows affected (0.02 sec)
+
+mysql> INSERT INTO Desarrollo (Tipo, Terminacion)
+    -> VALUES
+    -> 
+    -> ('RestAPI', '2024-06-01'),
+    -> ('RestAPI', '2024-06-14'),
+    -> ('RestAPI', '2024-06-15'),
+    -> ('Web', '2024-06-01'),
+    -> ('Web', '2024-06-02'),
+    -> ('Web', '2024-06-19'),
+    -> ('App', '2024-06-15'),
+    -> ('App', '2024-06-01'),  
+    -> ('App', '2024-06-30'); 
+Query OK, 9 rows affected (0.01 sec)
+Records: 9  Duplicates: 0  Warnings: 0
+
+mysql> WITH Ordenado AS (
+    ->  
+    ->     SELECT 
+    ->     Tipo,
+    ->     Terminacion,
+    ->     LAG(Terminacion) OVER (PARTITION BY Tipo ORDER BY Terminacion) AS FechaAnterior
+    ->     FROM Desarrollo
+    ->     )
+    ->      
+    ->     SELECT 
+    ->     Tipo,
+    ->     AVG(DATEDIFF(Terminacion, FechaAnterior)) AS Promedio
+    ->     FROM Ordenado
+    ->     WHERE FechaAnterior IS NOT NULL 
+    ->     GROUP BY Tipo; 
++---------+----------+
+| Tipo    | Promedio |
++---------+----------+
+| App     |  14.5000 |
+| RestAPI |   7.0000 |
+| Web     |   9.0000 |
++---------+----------+
+3 rows in set (0.00 sec)
+
+-------------------------------------------------------------------------------------------------------------------------
+/*
+EJERCICIO 3
+*/
+
+CREATE TABLE Inventario (
+    ID int AUTO_INCREMENT PRIMARY KEY,
+    Fecha date,
+    Ajuste int
+);
+
+mysql> 
+mysql> CREATE TABLE Inventario (
+    ->     ID int AUTO_INCREMENT PRIMARY KEY,
+    ->     Fecha date,
+    ->     Ajuste int
+    -> );
+Query OK, 0 rows affected (0.03 sec)
+
+mysql> INSERT INTO Inventario (Fecha, Ajuste) VALUES
+    -> ('2025-01-03', 100),
+    -> ('2025-01-04', 75),
+    -> ('2025-01-05', -150),
+    -> ('2025-01-06', 50),
+    -> ('2025-01-07', -70);
+Query OK, 5 rows affected (0.00 sec)
+Records: 5  Duplicates: 0  Warnings: 0
+
+mysql> SELECT 
+    ->     DATE_FORMAT(Fecha, '%d/%m/%Y') AS Fecha,
+    ->     Ajuste,
+    ->     SUM(Ajuste) OVER (ORDER BY Fecha) AS Inventario
+    -> FROM Inventario;
++------------+--------+------------+
+| Fecha      | Ajuste | Inventario |
++------------+--------+------------+
+| 03/01/2025 |    100 |        100 |
+| 04/01/2025 |     75 |        175 |
+| 05/01/2025 |   -150 |         25 |
+| 06/01/2025 |     50 |         75 |
+| 07/01/2025 |    -70 |          5 |
++------------+--------+------------+
+5 rows in set (0.00 sec)
