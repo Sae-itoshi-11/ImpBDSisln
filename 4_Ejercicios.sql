@@ -35,7 +35,7 @@ mysql> SELECT FLUJO,
 ------------------------------------------------------------
 
 CREATE TABLE LICENCIAS (
-    IDEMPLEADO int (4),
+    IDEMPLEADO int (4) PRIMARY KEY,
     LICENCIA varchar (10) NOT  NULL
 );
 
@@ -55,4 +55,9 @@ INSERT INTO LICENCIAS (IDEMPLEADO, LICENCIA) VALUES
 (5005, 'Tipo B'),
 (5005, 'Tipo D');
 
-SELECT 
+SELECT  x.LICENCIA, y.LICENCIA
+FROM x.LICENCIA
+JOIN y.LICENCIA 
+ON x.LICENCIA = y.LICENCIA
+WHERE a.IDEMPLEADO = 
+
