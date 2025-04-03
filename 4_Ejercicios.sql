@@ -33,31 +33,90 @@ mysql> SELECT FLUJO,
 4 rows in set (0.00 sec)
     
 ------------------------------------------------------------
+//*
+    EJERCICIO 2
+*//
 
-CREATE TABLE LICENCIAS (
-    IDEMPLEADO int (4) PRIMARY KEY,
-    LICENCIA varchar (10) NOT  NULL
-);
+Query OK, 0 rows affected (0.03 sec)
+mysql> CREATE TABLE LICENCIAS (
+    ->     IDEMPLEADO int (4),
+    ->     LICENCIA varchar (10) NOT  NULL
+    -> );
+Query OK, 0 rows affected, 1 warning (0.04 sec)
 
-INSERT INTO LICENCIAS (IDEMPLEADO, LICENCIA) VALUES 
-(1001, 'Tipo A'),
-(1001, 'Tipo B'),
-(1001, 'Tipo C'),
-(2002, 'Tipo A'),
-(2002, 'Tipo B'),
-(2002, 'Tipo C'),
-(3003, 'Tipo A'),
-(3003, 'Tipo D'),
-(4004, 'Tipo A'),
-(4004, 'Tipo B'),
-(4004, 'Tipo D'),
-(5005, 'Tipo A'),
-(5005, 'Tipo B'),
-(5005, 'Tipo D');
+mysql> INSERT INTO LICENCIAS (IDEMPLEADO, LICENCIA) VALUES 
+    -> (1001, 'Tipo A'),
+    -> (1001, 'Tipo B'),
+    -> (1001, 'Tipo C'),
+    -> (2002, 'Tipo A'),
+    -> (2002, 'Tipo B'),
+    -> (2002, 'Tipo C'),
+    -> (3003, 'Tipo A'),
+    -> (3003, 'Tipo D'),
+    -> (4004, 'Tipo A'),
+    -> (4004, 'Tipo B'),
+    -> (4004, 'Tipo D'),
+    -> (5005, 'Tipo A'),
+    -> (5005, 'Tipo B'),
+    -> (5005, 'Tipo D');
+Query OK, 14 rows affected (0.01 sec)
+Records: 14  Duplicates: 0  Warnings: 0
+    
+mysql> SELECT l1.IDEMPLEADO AS Id_empleado, 
+    ->        l2.IDEMPLEADO AS Id_empleado, 
+    ->        COUNT(*) AS Coincidencias
+    -> FROM LICENCIAS l1
+    -> JOIN LICENCIAS l2 
+    ->     ON l1.LICENCIA = l2.LICENCIA 
+    ->     AND l1.IDEMPLEADO != l2.IDEMPLEADO
+    -> GROUP BY l1.IDEMPLEADO, l2.IDEMPLEADO
+    -> HAVING COUNT(*) = (SELECT COUNT(*) FROM LICENCIAS WHERE IDEMPLEADO = l1.IDEMPLEADO)
+    -> AND COUNT(*) = (SELECT COUNT(*) FROM LICENCIAS WHERE IDEMPLEADO = l2.IDEMPLEADO);
++-------------+-------------+---------------+
+| Id_empleado | Id_empleado | Coincidencias |
++-------------+-------------+---------------+
+|        2002 |        1001 |             3 |
+|        1001 |        2002 |             3 |
+|        5005 |        4004 |             3 |
+|        4004 |        5005 |             3 |
++-------------+-------------+---------------+
+4 rows in set (0.01 sec)
 
-SELECT  x.LICENCIA, y.LICENCIA
-FROM x.LICENCIA
-JOIN y.LICENCIA 
-ON x.LICENCIA = y.LICENCIA
-WHERE a.IDEMPLEADO = 
+---------------------------------------------------------------------------------------------------
+//*
+    EJERCICIO 3
+*//
+    
+mysql> CREATE TABLE ENTERO (
+    ->     num int (2)
+    -> );
+Query OK, 0 rows affected, 1 warning (0.07 sec)
 
+mysql> INSERT INTO ENTERO (num) VALUES 
+    -> (5),
+    -> (6),
+    -> (10),
+    -> (10),
+    -> (13),
+    -> (14),
+    -> (17),
+    -> (20),
+    -> (81),
+    -> (90),
+    -> (76);
+Query OK, 11 rows affected (0.01 sec)
+Records: 11  Duplicates: 0  Warnings: 0
+
+SELECT 
+    AVG(num) AS Media,
+    (SELECT num FROM ENTERO 
+     GROUP BY num 
+     ORDER BY COUNT(*) DESC 
+     LIMIT 1) AS Moda,
+    (SELECT num FROM ENTERO 
+     ORDER BY num 
+     LIMIT 1 OFFSET (SELECT COUNT(*) FROM ENTERO) DIV 2) AS Mediana,
+    (MAX(num) - MIN(num)) AS Rango
+FROM ENTERO;
+
+//* Persiste un error en la media y rango *//
