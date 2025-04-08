@@ -107,16 +107,30 @@ mysql> INSERT INTO ENTERO (num) VALUES
 Query OK, 11 rows affected (0.01 sec)
 Records: 11  Duplicates: 0  Warnings: 0
 
-SELECT 
-    AVG(num) AS Media,
-    (SELECT num FROM ENTERO 
-     GROUP BY num 
-     ORDER BY COUNT(*) DESC 
-     LIMIT 1) AS Moda,
-    (SELECT num FROM ENTERO 
-     ORDER BY num 
-     LIMIT 1 OFFSET (SELECT COUNT(*) FROM ENTERO) DIV 2) AS Mediana,
-    (MAX(num) - MIN(num)) AS Rango
-FROM ENTERO;
-
-//* Persiste un error en la media y rango *//
+mysql> WITH ORDENADO AS (
+    ->     SELECT 
+    ->         num,
+    ->         ROW_NUMBER() OVER (ORDER BY num) AS row_num,
+    ->         COUNT(*) OVER () AS total_count
+    ->     FROM ENTERO
+    -> ),
+    -> Moda AS (
+    ->     SELECT 
+    ->         num,
+    ->         COUNT(*) AS Frecuencia
+    ->     FROM ENTERO
+    ->     GROUP BY num
+    ->     ORDER BY Frecuencia DESC
+    ->     LIMIT 1
+    -> )
+    -> SELECT 
+    ->     (SELECT AVG(num) FROM ENTERO) AS Media,
+    ->     (SELECT num FROM ORDENADO WHERE row_num = FLOOR((total_count + 1) / 2)) AS Mediana,
+    ->     (SELECT num FROM Moda) AS Moda,
+    ->     (SELECT MAX(num) - MIN(num) FROM ENTERO) AS Rango;
++---------+---------+------+-------+
+| Media   | Mediana | Moda | Rango |
++---------+---------+------+-------+
+| 31.0909 |      14 |   10 |    85 |
++---------+---------+------+-------+
+1 row in set (0.00 sec)
