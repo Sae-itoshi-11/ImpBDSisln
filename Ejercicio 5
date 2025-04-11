@@ -97,6 +97,7 @@ mysql> SELECT GROUP_CONCAT( sintaxis SEPARATOR ' ') AS Sintaxis
 //*
 EJERCICIO 3
 *//
+
 mysql> CREATE TABLE JUEGOSGLOB (
     ->     JugadorA int (4) NOT NULL,
     ->     JugadorB int (4) NOT NULL,
