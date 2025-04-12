@@ -2,10 +2,248 @@
 EJERCICIO 1
 *//
 
+mysql> CREATE TABLE DESAG (
+    ->     Productos varchar (10) NOT NULL,
+    ->     Cantidad int (1)NOT NULL
+    -> );
+Query OK, 0 rows affected, 1 warning (1.97 sec)
+
+mysql> INSERT INTO DESAG (Productos, Cantidad) VALUES 
+    -> ('Lápiz', 3),
+    -> ('Borrador', 4),
+    -> ('Cuaderno', 2);
+Query OK, 3 rows affected (0.00 sec)
+Records: 3  Duplicates: 0  Warnings: 0
+
+mysql> SELECT Productos, 1 AS cantidad FROM DESAG WHERE Cantidad >= 1
+    -> UNION ALL
+    -> SELECT Productos, 1 AS cantidad FROM DESAG WHERE Cantidad >= 2
+    -> UNION ALL
+    -> SELECT Productos, 1 AS cantidad FROM DESAG WHERE Cantidad >= 3
+    -> UNION ALL
+    -> SELECT Productos, 1 AS cantidad FROM DESAG WHERE Cantidad >= 4
+    -> UNION ALL
+    -> SELECT Productos, 1 AS cantidad FROM DESAG WHERE Cantidad >= 5
+    -> UNION ALL
+    -> SELECT Productos, 1 AS cantidad FROM DESAG WHERE Cantidad >= 6
+    -> UNION ALL
+    -> SELECT Productos, 1 AS cantidad FROM DESAG WHERE Cantidad >= 7
+    -> UNION ALL
+    -> SELECT Productos, 1 AS cantidad FROM DESAG WHERE Cantidad >= 8
+    -> UNION ALL
+    -> SELECT Productos, 1 AS cantidad FROM DESAG WHERE Cantidad >= 9
+    -> 
+    -> ORDER BY Productos;
+
++-----------+----------+
+| Productos | cantidad |
++-----------+----------+
+| Borrador  |        1 |
+| Borrador  |        1 |
+| Borrador  |        1 |
+| Borrador  |        1 |
+| Cuaderno  |        1 |
+| Cuaderno  |        1 |
+| Lápiz     |        1 |
+| Lápiz     |        1 |
+| Lápiz     |        1 |
++-----------+----------+
+9 rows in set (0.00 sec)
+
+//*
+EJERCICIO 2
+*//
+mysql> CREATE TABLE Asientos(
+    ->  num_asiento INTEGER
+    -> ); 
+Query OK, 0 rows affected (0.04 sec)
+mysql> INSERT INTO Asientos VALUES 
+    -> (7),(13),(14),(15),(27),(28),(29),(30), (31),(32),(33),(34),(35),(52),(53),(54);
+Query OK, 16 rows affected (0.01 sec)
+Records: 16  Duplicates: 0  Warnings: 0
+mysql> CREATE TEMPORARY TABLE Asientos_desocupados (
+    ->     num INT
+    -> );
+Query OK, 0 rows affected (0.00 sec)
+mysql> INSERT INTO Asientos_desocupados (num)
+    -> SELECT a.N + b.N * 10 + 1 AS num
+    -> FROM (
+    ->     SELECT 0 AS N UNION ALL SELECT 1 UNION ALL SELECT 2 UNION ALL SELECT 3 UNION ALL SELECT 4
+    ->     UNION ALL SELECT 5 UNION ALL SELECT 6 UNION ALL SELECT 7 UNION ALL SELECT 8 UNION ALL SELECT 9
+    -> ) a,
+    -> (
+    ->     SELECT 0 AS N UNION ALL SELECT 1 UNION ALL SELECT 2 UNION ALL SELECT 3 UNION ALL SELECT 4
+    ->     UNION ALL SELECT 5
+    -> ) b
+    -> WHERE a.N + b.N * 10 + 1 <= 54;
+Query OK, 54 rows affected (0.00 sec)
+Records: 54  Duplicates: 0  Warnings: 0
+
+mysql> CREATE TEMPORARY TABLE Disponibles AS
+    -> SELECT num AS Asiento
+    -> FROM Asientos_desocupados
+    -> WHERE num NOT IN (SELECT num_asiento FROM Asientos);
+Query OK, 38 rows affected (0.00 sec)
+Records: 38  Duplicates: 0  Warnings: 0
+
+mysql> SELECT 
+    ->     CASE 
+    ->         WHEN asiento % 2 = 0 THEN 'Pares' 
+    ->         ELSE 'Impares' 
+    ->     END AS Tipo,
+    ->     COUNT(*) AS Total
+    -> FROM Disponibles
+    -> GROUP BY Tipo;
++---------+-------+
+| Tipo    | Total |
++---------+-------+
+| Impares |    18 |
+| Pares   |    20 |
++---------+-------+
+2 rows in set (0.00 sec)
+
+mysql> SELECT COUNT(*) AS Disponibles FROM Disponibles;
++-------------+
+| Disponibles |
++-------------+
+|          38 |
++-------------+
+1 row in set (0.02 sec)
+---------------------------------------------------------------------------------------------------
 //*
 EJERCICIO 2
 *//
 
+mysql> CREATE TABLE Asientos(
+    ->  num_asiento INTEGER
+    -> ); 
+Query OK, 0 rows affected (0.04 sec)
+mysql> INSERT INTO Asientos VALUES 
+    -> (7),(13),(14),(15),(27),(28),(29),(30), (31),(32),(33),(34),(35),(52),(53),(54);
+Query OK, 16 rows affected (0.01 sec)
+Records: 16  Duplicates: 0  Warnings: 0
+
+mysql> CREATE TEMPORARY TABLE Asientos_desocupados (
+    ->     num INT
+    -> );
+Query OK, 0 rows affected (0.00 sec)
+
+mysql> INSERT INTO Asientos_desocupados (num)
+    -> SELECT a.N + b.N * 10 + 1 AS num
+    -> FROM (
+    ->     SELECT 0 AS N UNION ALL SELECT 1 UNION ALL SELECT 2 UNION ALL SELECT 3 UNION ALL SELECT 4
+    ->     UNION ALL SELECT 5 UNION ALL SELECT 6 UNION ALL SELECT 7 UNION ALL SELECT 8 UNION ALL SELECT 9
+    -> ) a,
+    -> (
+    ->     SELECT 0 AS N UNION ALL SELECT 1 UNION ALL SELECT 2 UNION ALL SELECT 3 UNION ALL SELECT 4
+    ->     UNION ALL SELECT 5
+    -> ) b
+    -> WHERE a.N + b.N * 10 + 1 <= 54;
+Query OK, 54 rows affected (0.00 sec)
+Records: 54  Duplicates: 0  Warnings: 0
+
+mysql> CREATE TEMPORARY TABLE Disponibles AS
+    -> SELECT num AS Asiento
+    -> FROM Asientos_desocupados
+    -> WHERE num NOT IN (SELECT num_asiento FROM Asientos);
+Query OK, 38 rows affected (0.00 sec)
+Records: 38  Duplicates: 0  Warnings: 0
+
+mysql> SELECT 
+    ->     CASE 
+    ->         WHEN asiento % 2 = 0 THEN 'Pares' 
+    ->         ELSE 'Impares' 
+    ->     END AS Tipo,
+    ->     COUNT(*) AS Total
+    -> FROM Disponibles
+    -> GROUP BY Tipo;
+
++---------+-------+
+| Tipo    | Total |
++---------+-------+
+| Impares |    18 |
+| Pares   |    20 |
++---------+-------+
+2 rows in set (0.00 sec)
+
+mysql> SELECT COUNT(*) AS Disponibles FROM Disponibles;
++-------------+
+| Disponibles |
++-------------+
+|          38 |
++-------------+
+1 row in set (0.02 sec)
+
+mysql> SELECT 
+    ->     MIN(Asiento) AS espacio_inicio,
+    ->     MAX(Asiento) AS espacio_final
+    -> FROM (
+    ->     SELECT 
+    ->         Asiento,
+    ->         Asiento - ROW_NUMBER() OVER (ORDER BY asiento) AS grupo
+    ->     FROM Disponibles
+    -> ) AS Agrupados
+    -> GROUP BY Grupo;
++----------------+---------------+
+| espacio_inicio | espacio_final |
++----------------+---------------+
+|              1 |             6 |
+|              8 |            12 |
+|             16 |            26 |
+|             36 |            51 |
++----------------+---------------+
+4 rows in set (0.00 sec)
+
 //* 
 EJERCICIO 3
 *//
+
+mysql> CREATE TABLE VOLVALLFUTUR (
+    ->     Inicio date,
+    ->     Final date
+    -> );
+Query OK, 0 rows affected (0.02 sec)
+
+mysql> INSERT INTO VOLVALLFUTUR (Inicio, Final) VALUES
+    -> ('2025-01-01', '2025-01-05'),
+    -> ('2025-03-01', '2025-01-09'),
+    -> ('2025-01-10', '2025-01-11'),
+    -> ('2025-01-12', '2025-01-16'),
+    -> ('2025-01-15', '2025-01-19');
+Query OK, 5 rows affected (0.00 sec)
+Records: 5  Duplicates: 0  Warnings: 0
+
+mysql> WITH Ordenado AS (
+    ->     SELECT *,
+    ->            LAG(Final) OVER (ORDER BY Inicio) AS final_anterior
+    ->     FROM VOLVALLFUTUR
+    -> ), 
+    -> Marcador AS (
+    ->     SELECT *,
+    ->            CASE
+    ->                WHEN final_anterior IS NULL OR Inicio > final_anterior THEN 1
+    ->                ELSE 0
+    ->            END AS nuevo_grupo
+    ->     FROM Ordenado
+    -> ), 
+    -> Grupos AS (
+    ->     SELECT *,
+    ->            SUM(nuevo_grupo) OVER (ORDER BY Inicio) AS grupo_id
+    ->     FROM Marcador
+    -> )
+    -> SELECT 
+    ->     MIN(Inicio) AS Inicio,
+    ->     MAX(Final) AS Final
+    -> FROM Grupos
+    -> GROUP BY grupo_id
+    -> ORDER BY Inicio;
+
++------------+------------+
+| Inicio     | Final      |
++------------+------------+
+| 2025-01-01 | 2025-01-05 |
+| 2025-01-10 | 2025-01-11 |
+| 2025-01-12 | 2025-01-19 |
+| 2025-03-01 | 2025-01-09 |
++------------+------------+
+4 rows in set (0.00 sec)
