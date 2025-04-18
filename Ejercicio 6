@@ -49,67 +49,7 @@ mysql> SELECT Productos, 1 AS cantidad FROM DESAG WHERE Cantidad >= 1
 | Lápiz     |        1 |
 +-----------+----------+
 9 rows in set (0.00 sec)
-
-//*
-EJERCICIO 2
-*//
-mysql> CREATE TABLE Asientos(
-    ->  num_asiento INTEGER
-    -> ); 
-Query OK, 0 rows affected (0.04 sec)
-mysql> INSERT INTO Asientos VALUES 
-    -> (7),(13),(14),(15),(27),(28),(29),(30), (31),(32),(33),(34),(35),(52),(53),(54);
-Query OK, 16 rows affected (0.01 sec)
-Records: 16  Duplicates: 0  Warnings: 0
-mysql> CREATE TEMPORARY TABLE Asientos_desocupados (
-    ->     num INT
-    -> );
-Query OK, 0 rows affected (0.00 sec)
-mysql> INSERT INTO Asientos_desocupados (num)
-    -> SELECT a.N + b.N * 10 + 1 AS num
-    -> FROM (
-    ->     SELECT 0 AS N UNION ALL SELECT 1 UNION ALL SELECT 2 UNION ALL SELECT 3 UNION ALL SELECT 4
-    ->     UNION ALL SELECT 5 UNION ALL SELECT 6 UNION ALL SELECT 7 UNION ALL SELECT 8 UNION ALL SELECT 9
-    -> ) a,
-    -> (
-    ->     SELECT 0 AS N UNION ALL SELECT 1 UNION ALL SELECT 2 UNION ALL SELECT 3 UNION ALL SELECT 4
-    ->     UNION ALL SELECT 5
-    -> ) b
-    -> WHERE a.N + b.N * 10 + 1 <= 54;
-Query OK, 54 rows affected (0.00 sec)
-Records: 54  Duplicates: 0  Warnings: 0
-
-mysql> CREATE TEMPORARY TABLE Disponibles AS
-    -> SELECT num AS Asiento
-    -> FROM Asientos_desocupados
-    -> WHERE num NOT IN (SELECT num_asiento FROM Asientos);
-Query OK, 38 rows affected (0.00 sec)
-Records: 38  Duplicates: 0  Warnings: 0
-
-mysql> SELECT 
-    ->     CASE 
-    ->         WHEN asiento % 2 = 0 THEN 'Pares' 
-    ->         ELSE 'Impares' 
-    ->     END AS Tipo,
-    ->     COUNT(*) AS Total
-    -> FROM Disponibles
-    -> GROUP BY Tipo;
-+---------+-------+
-| Tipo    | Total |
-+---------+-------+
-| Impares |    18 |
-| Pares   |    20 |
-+---------+-------+
-2 rows in set (0.00 sec)
-
-mysql> SELECT COUNT(*) AS Disponibles FROM Disponibles;
-+-------------+
-| Disponibles |
-+-------------+
-|          38 |
-+-------------+
-1 row in set (0.02 sec)
----------------------------------------------------------------------------------------------------
+---------------------------------------------------------------------------------------------------------------
 //*
 EJERCICIO 2
 *//
@@ -193,7 +133,7 @@ mysql> SELECT
 |             36 |            51 |
 +----------------+---------------+
 4 rows in set (0.00 sec)
-
+--------------------------------------------------------------------------------------------------------------------
 //* 
 EJERCICIO 3
 *//
