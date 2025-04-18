@@ -1,0 +1,139 @@
+//*
+EJERCICIO 1
+*//
+
+mysql> CREATE TABLE PUNTUACION (
+    ->     IdJugador int (4) NOT NULL,
+    ->     Marcador int (4) NOT NULL
+    -> );
+Query OK, 0 rows affected, 2 warnings (0.08 sec)
+
+mysql> INSERT INTO PUNTUACION (IdJugador, Marcador) VALUES
+    -> (1001, 2343),
+    -> (2002, 9432),
+    -> (3003, 6548),
+    -> (4004, 1054),
+    -> (5005, 6832);
+Query OK, 5 rows affected (0.01 sec)
+Records: 5  Duplicates: 0  Warnings: 0
+
+mysql> WITH JugadoresOrdenados AS (
+    ->     SELECT 
+    ->         IdJugador,
+    ->         Marcador,
+    ->         ROW_NUMBER() OVER (ORDER BY Marcador DESC) AS Posicion,
+    ->         COUNT(*) OVER () AS total
+    ->     FROM PUNTUACION
+    -> )
+    -> SELECT 
+    ->     CASE 
+    ->         WHEN Posicion <= CEIL(total / 2.0) THEN 1
+    ->         ELSE 2
+    ->     END AS Categoria,
+    ->     IdJugador,
+    ->     Marcador
+    -> FROM JugadoresOrdenados
+    -> ORDER BY Categoria, Marcador DESC;
+
++-----------+-----------+----------+
+| Categoria | IdJugador | Marcador |
++-----------+-----------+----------+
+|         1 |      2002 |     9432 |
+|         1 |      5005 |     6832 |
+|         1 |      3003 |     6548 |
+|         2 |      1001 |     2343 |
+|         2 |      4004 |     1054 |
++-----------+-----------+----------+
+5 rows in set (0.01 sec)
+-------------------------------------------------------------------------------------------------------------------
+//*
+EJERCICIO 2
+*//
+
+mysql> CREATE TABLE Registros (
+    ->     IdOrden int (1) NOT NULL,
+    ->     IdCliente int (4) NOT NULL,
+    ->     Fecha varchar (11) NOT NULL,
+    ->     Cantidad varchar (5) NOT NULL,
+    ->     Estado varchar (3) NOT NULL
+    -> );
+Query OK, 0 rows affected, 2 warnings (0.03 sec)
+
+mysql> INSERT INTO Registros (IdOrden, IdCliente, Fecha, Cantidad, Estado) VALUES 
+    -> (1, 1001, '01/01/2025', '$100', 'JAL'),
+    -> (2, 3003, '01/01/2025', '$100', 'COL'),
+    -> (3, 1001, '03/01/2025', '$100', 'JAL'),
+    -> (4, 2002, '02/01/2025', '$150', 'JAL'),
+    -> (5, 1001, '02/01/2025', '$100', 'JAL'),
+    -> (6, 4004, '05/01/2025', '$50', 'COL'),
+    -> (7, 1001, '01/01/2025', '$150', 'JAL'),
+    -> (8, 3003, '03/01/2025', '$100', 'COL'),
+    -> (9, 4004, '04/01/2025', '$100', 'COL'),
+    -> (10, 1001, '01/01/2025', '$75', 'JAL'),
+    -> (11, 2002,'02/01/2025', '$75', 'JAL'),
+    -> (12, 3003, '02/01/2025', '$100', 'COL'),
+    -> (13, 4004, '05/01/2025', '$100', 'COL');   
+Query OK, 13 rows affected (0.00 sec)
+Records: 13  Duplicates: 0  Warnings: 0
+
+mysql> SELECT *
+    -> FROM Registros
+    -> ORDER BY IdOrden
+    -> LIMIT 6 OFFSET 4;
++---------+-----------+------------+----------+--------+
+| IdOrden | IdCliente | Fecha      | Cantidad | Estado |
++---------+-----------+------------+----------+--------+
+|       5 |      1001 | 02/01/2025 | $100     | JAL    |
+|       6 |      4004 | 05/01/2025 | $50      | COL    |
+|       7 |      1001 | 01/01/2025 | $150     | JAL    |
+|       8 |      3003 | 03/01/2025 | $100     | COL    |
+|       9 |      4004 | 04/01/2025 | $100     | COL    |
+|      10 |      1001 | 01/01/2025 | $75      | JAL    |
++---------+-----------+------------+----------+--------+
+6 rows in set (0.00 sec)
+------------------------------------------------------------------------------------------------------
+//*
+EJERCICIO 3
+*//
+
+mysql> CREATE TABLE PROVEEDORES (
+    ->     IdOrden int (1) NOT NULL,
+    ->     IdCliente int (4) NOT NULL,
+    ->     Cantidad int (2) NOT NULL,
+    ->     Proveedor varchar (6) NOT NULL
+    -> );
+Query OK, 0 rows affected, 3 warnings (0.04 sec)
+
+mysql> INSERT INTO PROVEEDORES (IdOrden, IdCliente, Cantidad, Proveedor) VALUES 
+    -> (1, 1001, 12, 'IBM'),
+    -> (2, 1001, 54, 'IBM'),
+    -> (3, 1001, 32, 'Amazon'),
+    -> (4, 2002, 7, 'Amazon'),
+    -> (5, 2002, 16, 'Amazon'),
+    -> (6, 2002, 5, 'IBM');
+Query OK, 6 rows affected (0.02 sec)
+Records: 6  Duplicates: 0  Warnings: 0
+
+mysql> WITH ConteoDePedidos AS (
+    ->     SELECT 
+    ->         IdCliente,
+    ->         Proveedor,
+    ->         COUNT(*) AS TotalPedidos,
+    ->         ROW_NUMBER() OVER (PARTITION BY IdCliente ORDER BY COUNT(*) DESC) AS rn
+    ->     FROM PROVEEDORES
+    ->     GROUP BY IdCliente, Proveedor
+    -> )
+    -> SELECT 
+    ->     IdCliente,
+    ->     Proveedor
+    -> FROM ConteoDePedidos
+    -> WHERE rn = 1;
+
++-----------+-----------+
+| IdCliente | Proveedor |
++-----------+-----------+
+|      1001 | IBM       |
+|      2002 | Amazon    |
++-----------+-----------+
+2 rows in set (0.00 sec)
+
