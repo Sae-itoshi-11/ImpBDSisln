@@ -1,6 +1,6 @@
-/* 
+//* 
 EJERCICIO 1
-*/
+*//
 
 mysql> CREATE TABLE CasosPrueba (
     ->     Caso char(1)
@@ -31,9 +31,9 @@ mysql> SELECT CONCAT(a.Caso, ',', b.Caso, ',', c.Caso) AS Permutacion
 6 rows in set (0.00 sec)
 
 ------------------------------------------------------------------------------------------------------------------
-/*
+//*
 EJERCICIO 2
-*/
+*//
 
 mysql> CREATE TABLE Desarrollo (
     ->     Id int AUTO_INCREMENT PRIMARY KEY,
@@ -82,9 +82,9 @@ mysql> WITH Ordenado AS (
 3 rows in set (0.00 sec)
 
 -------------------------------------------------------------------------------------------------------------------------
-/*
+//*
 EJERCICIO 3
-*/
+*//
 
 CREATE TABLE Inventario (
     ID int AUTO_INCREMENT PRIMARY KEY,
