@@ -1,0 +1,131 @@
+//*
+EJERCICIO 1
+*//
+
+mysql> CREATE TABLE REGISTROS (
+    ->     flujo varchar (7) NOT NULL,
+    ->     paso int (1),
+    ->     estado varchar (18)
+    -> );
+Query OK, 0 rows affected, 1 warning (0.03 sec)
+
+mysql> INSERT INTO REGISTROS (flujo, paso, estado) values 
+    -> ('Alpha', 1, 'Error'),
+    -> ('Alpha', 2, 'Finalizado'),
+    -> ('Alpha', 3, 'Corriendo'),
+    -> ('Bravo', 1, 'Finalizado'),
+    -> ('Bravo', 2, 'Finalizado'),
+    -> ('Charlie', 1, 'Corriendo'),
+    -> ('Charlie',2, 'Corriendo'),
+    -> ('Delta', 1, 'Error'),
+    -> ('Delta', 2, 'Error'),
+    -> ('Echo', 1, 'Corriendo'),
+    -> ('Echo', 2, 'Finalizado');
+Query OK, 11 rows affected (0.01 sec)
+Records: 11  Duplicates: 0  Warnings: 0
+
+mysql> SELECT
+    ->   flujo,
+    ->   CASE
+    ->     WHEN errores = total THEN 'Error'
+    ->     WHEN corriendo = total THEN 'Corriendo'
+    ->     WHEN finalizado = total THEN 'Finalizado'
+    ->     
+    ->     WHEN errores > 0 AND (corriendo > 0 OR finalizado > 0) THEN 'Indeterminado'
+    ->     
+    ->     WHEN errores = 0 AND corriendo > 0 AND finalizado > 0 THEN 'Corriendo'
+    ->     SUM(CASE WHEN estado = 'Error' THEN 1 ELSE 0 END) AS errores,
+    ->     
+    ->     ELSE 'Indeterminado' 
+    -> 
+    ->   END AS estado_general
+    -> 
+    -> FROM (
+    ->   SELECT
+    ->     flujo,
+    ->     SUM(CASE WHEN estado = 'Error' THEN 1 ELSE 0 END) AS errores,
+    ->     SUM(CASE WHEN estado = 'Corriendo' THEN 1 ELSE 0 END) AS corriendo,
+    ->     SUM(CASE WHEN estado = 'Finalizado' THEN 1 ELSE 0 END) AS finalizado,
+    ->     COUNT(*) AS total
+    ->   FROM REGISTROS
+    ->   GROUP BY flujo
+    -> ) AS resumen;
+
++---------+----------------+
+| flujo   | estado_general |
++---------+----------------+
+| Alpha   | Indeterminado  |
+| Bravo   | Finalizado     |
+| Charlie | Corriendo      |
+| Delta   | Error          |
+| Echo    | Corriendo      |
++---------+----------------+
+5 rows in set (0.00 sec)
+--------------------------------------------------------------------------------------------------------------
+//* 
+EJERCICIO 2
+*//
+
+mysql> CREATE TABLE CONCATENARDATOS(
+    ->     secuencia int (1), 
+    ->     sintaxis varchar (25) NOT NULL
+    -> );
+Query OK, 0 rows affected, 1 warning (0.03 sec)
+
+mysql> INSERT INTO CONCATENARDATOS (secuencia, sintaxis) VALUES
+    -> (1, 'SELECT'),
+    -> (2, 'Producto,'),
+    -> (3, 'Precio,'),
+    -> (4, 'Disponibilidad,'),
+    -> (5, 'FROM'),
+    -> (6, 'Productos'),
+    -> (7, 'WHERE'),
+    -> (8, 'Precio'),
+    -> (9, '>100');
+Query OK, 9 rows affected (0.01 sec)
+Records: 9  Duplicates: 0  Warnings: 0
+
+mysql> SELECT GROUP_CONCAT( sintaxis SEPARATOR ' ') AS Sintaxis
+    -> FROM CONCATENARDATOS;
++---------------------------------------------------------------------------+
+| Sintaxis                                                                  |
++---------------------------------------------------------------------------+
+| SELECT Producto, Precio, Disponibilidad, FROM Productos WHERE Precio >100 |
++---------------------------------------------------------------------------+
+1 row in set (0.00 sec)
+-----------------------------------------------------------------------------------------------------------------------------
+//*
+EJERCICIO 3
+*//
+
+mysql> CREATE TABLE JUEGOSGLOB (
+    ->     JugadorA int (4) NOT NULL,
+    ->     JugadorB int (4) NOT NULL,
+    ->     Marcador int (4) NOT NULL
+    -> );
+Query OK, 0 rows affected, 3 warnings (0.04 sec)
+
+mysql> INSERT INTO JUEGOSGLOB (JugadorA, JugadorB, Marcador) VALUES 
+    -> (1001, 2002, 150),
+    -> (3003, 4004, 15),
+    -> (4004, 3003, 125);
+Query OK, 3 rows affected (0.00 sec)
+Records: 3  Duplicates: 0  Warnings: 0
+
+mysql> SELECT
+    ->   CASE WHEN JugadorA < JugadorB THEN JugadorA ELSE JugadorB END AS Jugador_1,
+    ->   CASE WHEN JugadorA > JugadorB THEN JugadorA ELSE JugadorB END AS Jugador_2,
+    ->   SUM(Marcador) AS total_puntos
+    -> 
+    -> FROM JUEGOSGLOB
+    -> GROUP BY
+    ->   CASE WHEN JugadorA < JugadorB THEN JugadorA ELSE JugadorB END,
+    ->   CASE WHEN JugadorA > JugadorB THEN JugadorA ELSE JugadorB END;
+
++-----------+-----------+--------------+
+| Jugador_1 | Jugador_2 | total_puntos |
++-----------+-----------+--------------+
+|      1001 |      2002 |          150 |
+|      3003 |      4004 |          140 |
++-----------+-----------+--------------+
+2 rows in set (0.00 sec)
