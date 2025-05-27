@@ -1,0 +1,51 @@
+//*
+  ACTIVIDAD 1
+*//
+
+mysql> INSERT INTO SampleData VALUES 
+    -> (3759),
+    -> (3760),
+    -> (3761),
+    -> (3762),
+    -> (3763);
+Query OK, 5 rows affected (0.01 sec)
+Records: 5  Duplicates: 0  Warnings: 0
+mysql> 
+mysql> SELECT IntegerValue
+    -> FROM SampleData
+    -> ORDER BY IntegerValue DESC
+    -> LIMIT 1 OFFSET 1;
++--------------+
+| IntegerValue |
++--------------+
+|         3762 |
++--------------+
+1 row in set (0.00 sec)
+----------
+
+mysql> CREATE TABLE Employees (
+    ->     NAME text (40) NOT NULL,
+    ->     SALARY varchar (9) NOT NULL
+    -> );
+Query OK, 0 rows affected (0.03 sec)
+
+mysql> INSERT INTO Employees VALUES 
+    -> ('Ayumi Arenas','$250,000'), 
+    -> ('Saul Hernandez','$250,000'), 
+    -> ('Alan Luna','$150,000'), 
+    -> ('Victor Sanchez','$150,000'), 
+    -> ('Jose Solis','$100,000'), 
+    -> ('Keysha Garcia','$100,000');
+Query OK, 6 rows affected (0.01 sec)
+Records: 6  Duplicates: 0  Warnings: 0
+
+mysql> SELECT DISTINCT SALARY
+    -> FROM Employees
+    -> ORDER BY SALARY DESC
+    -> LIMIT 1 OFFSET 1;
++----------+
+| SALARY   |
++----------+
+| $150,000 |
++----------+
+1 row in set (0.00 sec)
