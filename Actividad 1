@@ -49,3 +49,4 @@ mysql> SELECT DISTINCT SALARY
 | $150,000 |
 +----------+
 1 row in set (0.00 sec)
+
