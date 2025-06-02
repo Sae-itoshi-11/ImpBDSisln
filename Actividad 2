@@ -1,0 +1,111 @@
+//*
+  	ACTIVIDAD 2
+*//
+
+CREATE TABLE TiempodeEntrega (
+    ID INT PRIMARY KEY AUTO_INCREMENT,
+    COMPONENTE TEXT (10) NOT NULL,
+    DIAPARAENTREGA INT (1) NOT NULL
+);
+
+INSERT INTO TiempodeEntrega (COMPONENTE, DIAPARAENTREGA) VALUES
+('AMANECER', 7),
+('ATARDECER', 3),
+('ANOCHECER', 9);
+
+CREATE TABLE TiempodeManufactura (
+    PRODUCTO TEXT (10) NOT NULL,
+    COMPONENTE TEXT (40) NOT NULL,
+    DIADEMANUFACTURA INT (1) NOT NULL
+);
+
+INSERT INTO TiempodeManufactura (PRODUCTO, COMPONENTE, DIADEMANUFACTURA) VALUES
+('Amanecer', 'Photon Coil', 7),
+('Amanecer', 'Filamento', 2),
+('Amanecer', 'Capacitor', 3),
+('Amanecer', 'Esfera', 1),
+('Atardecer', 'Photon Coil', 7),
+('Atardecer', 'Filamento', 2),
+('Anochecer', 'Capacitor', 3),
+('Anochecer', 'Photon Coil', 1);
+
+SELECT
+    ROW_NUMBER() OVER () AS Id,
+    tm.PRODUCTO AS Producto,
+    MAX(tm.DIADEMANUFACTURA) AS `Días para armar`,
+    te.DIAPARAENTREGA AS `Días para entregar`,
+    CASE
+        WHEN MAX(tm.DIADEMANUFACTURA) = te.DIAPARAENTREGA THEN 'En tiempo'
+        WHEN MAX(tm.DIADEMANUFACTURA) > te.DIAPARAENTREGA THEN 'Adelantado'
+        ELSE 'Atrasado'
+    END AS Calendario
+FROM
+    TiempodeManufactura tm
+JOIN
+    TiempodeEntrega te ON UPPER(tm.PRODUCTO) = te.COMPONENTE
+GROUP BY
+    tm.PRODUCTO, te.DIAPARAENTREGA
+ORDER BY
+    tm.PRODUCTO;
+
+---------------------------------------------------------------------------
+
+mysql> CREATE TABLE TiempodeEntrega (
+    ->     ID INT PRIMARY KEY AUTO_INCREMENT,
+    ->     COMPONENTE TEXT (10) NOT NULL,
+    ->     DIAPARAENTREGA INT (1) NOT NULL
+    -> );
+Query OK, 0 rows affected, 1 warning (0.11 sec)
+
+mysql> 
+mysql> INSERT INTO TiempodeEntrega (COMPONENTE, DIAPARAENTREGA) VALUES
+    -> ('AMANECER', 7),
+    -> ('ATARDECER', 3),
+    -> ('ANOCHECER', 9);
+Query OK, 3 rows affected (0.02 sec)
+Records: 3  Duplicates: 0  Warnings: 0
+mysql> 
+mysql> CREATE TABLE TiempodeManufactura (
+    ->     PRODUCTO TEXT (10) NOT NULL,
+    ->     COMPONENTE TEXT (40) NOT NULL,
+    ->     DIADEMANUFACTURA INT (1) NOT NULL
+    -> );
+Query OK, 0 rows affected, 1 warning (0.08 sec)
+mysql> 
+mysql> INSERT INTO TiempodeManufactura (PRODUCTO, COMPONENTE, DIADEMANUFACTURA) VALUES
+    -> ('Amanecer', 'Photon Coil', 7),
+    -> ('Amanecer', 'Filamento', 2),
+    -> ('Amanecer', 'Capacitor', 3),
+    -> ('Amanecer', 'Esfera', 1),
+    -> ('Atardecer', 'Photon Coil', 7),
+    -> ('Atardecer', 'Filamento', 2),
+    -> ('Anochecer', 'Capacitor', 3),
+    -> ('Anochecer', 'Photon Coil', 1);
+Query OK, 8 rows affected (0.02 sec)
+Records: 8  Duplicates: 0  Warnings: 0
+mysql> SELECT
+    ->     ROW_NUMBER() OVER () AS Id,
+    ->     tm.PRODUCTO AS Producto,
+    ->     MAX(tm.DIADEMANUFACTURA) AS `Días para armar`,
+    ->     te.DIAPARAENTREGA AS `Días para entregar`,
+    ->     CASE
+    ->         WHEN MAX(tm.DIADEMANUFACTURA) = te.DIAPARAENTREGA THEN 'En tiempo'
+    ->         WHEN MAX(tm.DIADEMANUFACTURA) > te.DIAPARAENTREGA THEN 'Adelantado'
+    ->         ELSE 'Atrasado'
+    ->     END AS Calendario
+    -> FROM
+    ->     TiempodeManufactura tm
+    -> JOIN
+    ->     TiempodeEntrega te ON UPPER(tm.PRODUCTO) = te.COMPONENTE
+    -> GROUP BY
+    ->     tm.PRODUCTO, te.DIAPARAENTREGA
+    -> ORDER BY
+    ->     tm.PRODUCTO;
++----+-----------+------------------+---------------------+------------+
+| Id | Producto  | Días para armar  | Días para entregar  | Calendario |
++----+-----------+------------------+---------------------+------------+
+|  1 | Amanecer  |                7 |                   7 | En tiempo  |
+|  3 | Anochecer |                3 |                   9 | Atrasado   |
+|  2 | Atardecer |                7 |                   3 | Adelantado |
++----+-----------+------------------+---------------------+------------+
+3 rows in set (0.01 sec)
