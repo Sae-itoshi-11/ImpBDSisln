@@ -1,0 +1,7 @@
+SELECT
+   A.salary AS Employee1
+   ,B.salary AS Manager1
+FROM Employee A,
+     Employee B
+WHERE A.salary > B.salary;
+                
